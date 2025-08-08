@@ -53,6 +53,9 @@ All colors MUST be HSL.
     --primary-variant: 286 67% 55%;
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.25);
     --gradient-hero: radial-gradient(800px circle at var(--mx, 50%) var(--my, 50%), hsl(var(--primary) / 0.12), transparent 60%);
+    /* Ticker (news bar) */
+    --ticker-bg: 220 80% 45%;
+    --ticker-text: 48 100% 50%;
   }
 
   .dark {
@@ -92,6 +95,9 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 262 90% 70%;
+    /* Ticker (news bar) */
+    --ticker-bg: 220 80% 42%;
+    --ticker-text: 48 100% 55%;
   }
 }
 

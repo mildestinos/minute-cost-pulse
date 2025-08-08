@@ -61,36 +61,43 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				ticker: 'hsl(var(--ticker-bg))',
+				'ticker-foreground': 'hsl(var(--ticker-text))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
-			keyframes: {
-				'accordion-down': {
-					from: {
-						height: '0'
+				keyframes: {
+					'accordion-down': {
+						from: {
+							height: '0'
+						},
+						to: {
+							height: 'var(--radix-accordion-content-height)'
+						}
 					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
+					'accordion-up': {
+						from: {
+							height: 'var(--radix-accordion-content-height)'
+						},
+						to: {
+							height: '0'
+						}
+					},
+					marquee: {
+						'0%': { transform: 'translateX(100%)' },
+						'100%': { transform: 'translateX(-100%)' }
 					}
 				},
-				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+				animation: {
+					'accordion-down': 'accordion-down 0.2s ease-out',
+					'accordion-up': 'accordion-up 0.2s ease-out',
+					'marquee': 'marquee 20s linear infinite'
 				}
 			},
-			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
-		}
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;

@@ -21,6 +21,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import NewsTicker from "@/components/NewsTicker";
 
 function useCanonical() {
   const location = useLocation();
@@ -127,8 +128,15 @@ const Index = () => {
           <p className="text-muted-foreground mt-2">Visualize indicadores essenciais, perdas de minutos e tendências.</p>
         </header>
 
-        <section className="mb-6">
-          <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+          <NewsTicker items={[
+            "Nova parceria reduz custos em 8%",
+            "Unidade B bate recorde de eficiência no mês",
+            "Projeto de automação reduz perda de minutos",
+            "Relatório mensal: tendência de custo em queda"
+          ]} />
+          
+          <section className="mb-6">
+            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
             <div className="flex gap-3 flex-wrap">
               <Select value={period} onValueChange={(v) => setPeriod(v as Period)}>
                 <SelectTrigger className="w-[160px]">
