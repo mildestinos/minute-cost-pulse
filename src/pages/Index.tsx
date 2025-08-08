@@ -28,7 +28,7 @@ function useCanonical() {
   return canonical;
 }
 
-type Period = "24h" | "mensal";
+type Period = "mensal";
 
 type Point = { label: string; value: number };
 
@@ -48,18 +48,19 @@ function seedFrom(text: string) {
 function generateData(period: Period, unidade: Unidade): Point[] {
   const rand = seedFrom(unidade);
 
-  if (period === "24h") {
-    return Array.from({ length: 24 }).map((_, i) => ({
-      label: `${i}h`,
-      value: 0.18 + rand(i + 1) * 0.25, // custo/min
-    }));
-  }
-  // mensal: últimos 12 meses
+  // mensal: últimos 12 meses dinâmicos a partir do mês atual
   const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-  return Array.from({ length: 12 }).map((_, i) => ({
-    label: meses[i],
-    value: 0.17 + rand(i + 21) * 0.3,
-  }));
+  const now = new Date();
+  const startMonth = now.getMonth() - 11; // 11 meses atrás até o atual
+
+  return Array.from({ length: 12 }).map((_, i) => {
+    const idx = startMonth + i;
+    const m = ((idx % 12) + 12) % 12; // garante 0..11
+    return {
+      label: meses[m],
+      value: 0.17 + rand(i + 21) * 0.3,
+    };
+  });
 }
 
 function formatCurrencyBRL(v: number) {
@@ -73,14 +74,14 @@ function formatCurrencyBRL(v: number) {
 
 const Index = () => {
   const canonical = useCanonical();
-  const [period, setPeriod] = useState<Period>("24h");
+  const [period, setPeriod] = useState<Period>("mensal");
   const [unidade, setUnidade] = useState<Unidade>("Todas");
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const data = useMemo(() => generateData(period, unidade), [period, unidade]);
   const avg = useMemo(() => data.reduce((a, b) => a + b.value, 0) / data.length, [data]);
-  const minutesPerBucket = useMemo(() => (period === "24h" ? 60 : 30 * 24 * 60), [period]); // hora x mês (30 dias)
+  const minutesPerBucket = useMemo(() => 30 * 24 * 60, []); // minuto por mês (aprox. 30 dias) // hora x mês (30 dias)
   const total = useMemo(() => data.reduce((acc, p) => acc + p.value * minutesPerBucket, 0), [data, minutesPerBucket]);
   const peak = useMemo(() => Math.max(...data.map((d) => d.value)), [data]);
   const trendUp = data[data.length - 1].value >= data[0].value;
@@ -134,7 +135,6 @@ const Index = () => {
                   <SelectValue placeholder="Período" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="24h">Últimas 24h</SelectItem>
                   <SelectItem value="mensal">Mensal (12 meses)</SelectItem>
                 </SelectContent>
               </Select>
